@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface TeacherService {
-    Teacher findByEmail(String email);
+    Teacher findByEmail(String email) throws Exception;
+    Teacher addTeacher(Teacher teacher);
+    Teacher getTeacherById(Long id);
     List<Teacher> getAllTeachers();
-    void deleteTeacher(Long id);
-    void updateStudent(Long id,Teacher teacher);
+    void deleteTeacher(Long id) throws Exception;
+    Teacher updateTeacher(Teacher teacher);
 }

@@ -6,8 +6,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface AttendanceRepo extends JpaRepository<Attendance,Long> {
+import java.time.LocalDate;
+import java.util.List;
 
-    @Query(value = "SELECT COUNT(a) FROM Attendance a WHERE a.user IN :userId")
-    public long countAttendance(@Param("userId") Student student);
+public interface AttendanceRepo extends JpaRepository<Attendance,Long> {
+    @Query(value = "SELECT a from Attendance a WHERE a.enroll IN :enroll")
+    List<Attendance> findByEnroll(String enroll);
+
+    @Query(value = "SELECT a from Attendance a WHERE a.enroll IN : enroll AND a.date IN:date")
+    Attendance findByStudentIdAndDate(@Param("enroll") String enroll,@Param("date") LocalDate date);
+
+    @Query(value = "SELECT COUNT(a) FROM Attendance a WHERE a.enroll IN :enroll")
+    long countAttendance(@Param("enroll") String enroll);
+
+    @Query(value = "SELECT a from Attendance a WHERE a.className IN :cname")
+    List<Attendance> listAllAttendanceByClass(@Param("cname") String cname);
 }
