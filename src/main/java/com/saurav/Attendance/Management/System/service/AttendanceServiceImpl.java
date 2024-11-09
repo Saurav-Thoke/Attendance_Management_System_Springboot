@@ -3,6 +3,7 @@ package com.saurav.Attendance.Management.System.service;
 import com.saurav.Attendance.Management.System.model.Attendance;
 import com.saurav.Attendance.Management.System.model.Student;
 import com.saurav.Attendance.Management.System.repository.AttendanceRepo;
+import com.saurav.Attendance.Management.System.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ import java.util.List;
 public class AttendanceServiceImpl implements AttendanceService{
     @Autowired
     private AttendanceRepo attendanceRepo;
+
+    @Autowired
+    private StudentRepo studentRepo;
     @Override
     public List<Attendance> listAllAttendanceByClass(String cname) {
 
@@ -25,10 +29,10 @@ public class AttendanceServiceImpl implements AttendanceService{
     }
 
     @Override
-    public Attendance updateAttendance(Long attendanceId, LocalDate date, boolean isPresent) {
+    public Attendance updateAttendance(Long attendanceId, LocalDate attendanceDate, boolean isPresent) {
         Attendance atd=attendanceRepo.findById(attendanceId).get();
-        String enroll=atd.getEnroll();
-        Attendance attendanceOptional = attendanceRepo.findByStudentIdAndDate(enroll,date);
+        String enroll=atd.getStudent().getEnroll();
+        Attendance attendanceOptional = attendanceRepo.findByStudentIdAndDate(enroll,attendanceDate);
 
         if (attendanceOptional!=null) {
             Attendance attendance = attendanceOptional;
@@ -64,10 +68,11 @@ public class AttendanceServiceImpl implements AttendanceService{
 
 
     @Override
-    public void markAttendance(Student student, boolean present) {
+    public void markAttendance(String enroll, boolean present) {
+
         Attendance attendance = new Attendance();
-        attendance.setEnroll(student.getEnroll());
-        attendance.setFullName(student.getFullName());
+        Student student=studentRepo.findById(enroll).get();
+        attendance.setStudent(student);
         attendance.setAttendanceDate(LocalDate.now());
         attendance.setIsPresent(present);
         attendanceRepo.save(attendance);

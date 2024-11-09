@@ -13,7 +13,7 @@ public interface AttendanceService {
     Attendance updateAttendance(Long attendanceId, LocalDate date, boolean isPresent);
     void deleteAttendance(Long id);
     long countAttendance(String enroll);
-    void markAttendance(Student student, boolean present);
+    void markAttendance(String enroll, boolean present);
     List<Attendance> listAllAttendanceByClass(String cname);
     //List<Attendance> listAllAttendanceFromUserBetweenDate(Student student, String startDate, String endDate);
 
